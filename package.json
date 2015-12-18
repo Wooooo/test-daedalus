@@ -31,5 +31,8 @@
   "bugs": {
     "url": "https://github.com/Wooooo/test-daedalus/issues"
   },
-  "homepage": "https://github.com/Wooooo/test-daedalus#readme"
+  "homepage": "https://github.com/Wooooo/test-daedalus#readme",
+  "engines": {
+    node: ">=4.0.0"
+  }
 }
