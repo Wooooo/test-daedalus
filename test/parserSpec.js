@@ -10,7 +10,7 @@ describe('Icarus', function(){
 		var labyStr =   'DESCRIBE: Indents\n'+
 					    errorStr;
 		
-		expect(labyParser.parse.bind(null, labyStr)).to.throw(Error, 'Invalid indents. '+errorStr);
+		expect(labyParser.parse.bind(null, labyStr)).to.throw(Error, 'Invalid indent.');
 	});
 	
 	it('should throw an error if there is an line which has no key.', function(){
@@ -19,7 +19,7 @@ describe('Icarus', function(){
 		var labyStr =	'DESCRIBE: Lines\n'+
 						errorStr;
 						
-		expect(labyParser.parse.bind(null, labyStr)).to.throw(Error, 'Invalid line. '+errorStr);
+		expect(labyParser.parse.bind(null, labyStr)).to.throw(Error, 'Invalid line.');
 	});
     
     
