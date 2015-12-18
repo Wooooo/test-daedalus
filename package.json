@@ -33,6 +33,6 @@
   },
   "homepage": "https://github.com/Wooooo/test-daedalus#readme",
   "engines": {
-    node: ">=4.0.0"
+    "node": ">=4.0.0"
   }
 }
