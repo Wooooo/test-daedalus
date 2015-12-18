@@ -1,0 +1,35 @@
+{
+  "name": "test-daedalus",
+  "version": "0.0.1",
+  "description": "A test builder like cucumberjs but for tdd like mocha, jasmine",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "mocha": "^2.3.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wooooo/test-daedalus.git"
+  },
+  "keywords": [
+    "test-builder",
+    "cucumber",
+    "mocha",
+    "jasmine",
+    "yaml",
+    "yml",
+    "test",
+    "tdd",
+    "builder"
+  ],
+  "author": "Taewoo Kim <xodn4195@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Wooooo/test-daedalus/issues"
+  },
+  "homepage": "https://github.com/Wooooo/test-daedalus#readme"
+}
