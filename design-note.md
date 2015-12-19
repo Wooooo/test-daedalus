@@ -20,7 +20,7 @@ DESCRIBE: I
 - If below line has same indent, it is a sibling of current line
 - Following above rules, each node has children and value
 
-### frame
+### outline
 - Javascript object to contain AST (abstract syntax tree) for blueprint
 - Parsed by parser module
 ```javascript
