@@ -1,0 +1,10 @@
+DESCRIBE: I
+	CONTEXT: when the weather is cloudy,
+		IT: should feel blue..
+		
+		IT: should prepare for an umbrella.
+		# and a raincoat also
+		
+	CONTEXT: when the weather is sunny,
+		IT: should run everywhere like an insane dog!!
+		IT: should go picnic with friends.
