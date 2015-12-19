@@ -5,16 +5,14 @@ const
 
 describe('BluePrintParser', function(){
 	it('should throw an error if there is a line which has indents gap more than 2.', function(){
-	    var errorStr = '\t\tIT: should not have gap more than 2.';
-	    
-		var blueprint = 'DESCRIBE: Indents\n'+
+	    var blueprint = 'DESCRIBE: Indents\n'+
 					    '\t\tIT: should not have gap more than 2.';
 		
 		expect(parser.parse.bind(null, blueprint)).to.throw(Error, 'Invalid indent.');
 	});
 	
 	
-	it('should throw an error if there is an line which has no key.', function(){
+	it('should throw an error if there is a line which has no key.', function(){
 		var blueprint =	'DESCRIBE: Lines\n'+
 						'should have a key not like me.'
 						
@@ -22,15 +20,33 @@ describe('BluePrintParser', function(){
 	});
     
     
-    it('should return a correct object if value of line is empty.', function(){
+    it('should throw an error if there is a line which has empty key.', function() {
+    	var blueprint =	'DESCRIBE: Lines\n'+
+						':should not have a empty key not like me.';
+						
+		expect(parser.parse.bind(null, blueprint)).to.throw(Error, 'Invalid line.');
+    });
+    
+    
+    it('should ignore a comment which has leading #.', function(){
+    	var blueprint = 'DESCRIBE: Comment\n'+
+    					'# should ignore!';
+    	
+    	var outline = parser.parse(blueprint);
+    	
+    	expect(outline.children[0].children).to.be.undefined;
+    });
+    
+    
+    it('should return a correct object if a line which has empty value.', function(){
     	var blueprint = 
-    		'DESCRIBE: value\n'+
-    		'\tIT: should be able to be empty.\n'+
+    		'DESCRIBE: Line\n'+
+    		'\tIT: should be able to have empty value.\n'+
     		'\tIT: ';
     		
-    	var frame = parser.parse(blueprint);
+    	var outline = parser.parse(blueprint);
     	
-    	expect(frame.children[0].children[1].value).to.equal('');
+    	expect(outline.children[0].children[1].value).to.equal('');
     });
     
     
@@ -69,9 +85,9 @@ describe('BluePrintParser', function(){
     	];
     	
     	for(var i = 0 ; i < blueprint.length ; i++) {
-    		var frame 	= parser.parse(blueprint[i]);
+    		var outline 	= parser.parse(blueprint[i]);
     		
-    		expect(frame.children[0]).to.deep.equal(expected[i]);
+    		expect(outline.children[0]).to.deep.equal(expected[i]);
     	}
     });
 });
