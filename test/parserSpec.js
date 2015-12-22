@@ -1,93 +1,102 @@
 const
-	parser  = require('../lib/parser'),
-	expect		= require('chai').expect;
+	Parser  	= require('../lib/parser'),
+	expect		= require('chai').expect,
+	esprima		= require('esprima'),
+	r			= require('remove-tabs'),
+	util		= require('util'),
+	$			= require('esquery'),
+	diff		= require('deep-diff').diff;
 	
-
+	
 describe('BluePrintParser', function(){
 	it('should throw an error if there is a line which has indents gap more than 2.', function(){
-	    var blueprint = 'DESCRIBE: Indents\n'+
-					    '\t\tIT: should not have gap more than 2.';
+	    var blueprint = r`
+			DESCRIBE: Lines
+					InIT: should not have gap more than 2.`;
 		
-		expect(parser.parse.bind(null, blueprint)).to.throw(Error, 'Invalid indent.');
+		expect(Parser.parse.bind(null, blueprint)).to.throw(Error, 'Invalid indent.');
 	});
 	
 	
 	it('should throw an error if there is a line which has no key.', function(){
-		var blueprint =	'DESCRIBE: Lines\n'+
-						'should have a key not like me.'
+		var blueprint =	r`
+			DESCRIBE: Lines
+				should have a key not like me.`;
 						
-		expect(parser.parse.bind(null, blueprint)).to.throw(Error, 'Invalid line.');
+		expect(Parser.parse.bind(null, blueprint)).to.throw(Error, 'Invalid line.');
 	});
     
     
     it('should throw an error if there is a line which has empty key.', function() {
-    	var blueprint =	'DESCRIBE: Lines\n'+
-						':should not have a empty key not like me.';
+    	var blueprint =	r`
+    		DESCRIBE: Lines
+				:should not have a empty key not like me.`;
 						
-		expect(parser.parse.bind(null, blueprint)).to.throw(Error, 'Invalid line.');
+		expect(Parser.parse.bind(null, blueprint)).to.throw(Error, 'Invalid line.');
     });
     
     
     it('should ignore a comment which has leading #.', function(){
-    	var blueprint = 'DESCRIBE: Comment\n'+
-    					'# should ignore!';
+    	var blueprint = r`
+    		DESCRIBE: Comment
+				# should ignore!`;
     	
-    	var outline = parser.parse(blueprint);
+    	var outline = Parser.parse(blueprint);
+    	var block = $(outline, 'CallExpression BlockStatement');
     	
-    	expect(outline.children[0].children).to.be.undefined;
+    	expect(block[0].body).to.have.length(0);
     });
     
     
     it('should return a correct object if a line which has empty value.', function(){
-    	var blueprint = 
-    		'DESCRIBE: Line\n'+
-    		'\tIT: should be able to have empty value.\n'+
-    		'\tIT: ';
+    	var blueprint = r`
+			DESCRIBE: Line
+				IT: should be able to have empty value.
+				IT: `;
     		
-    	var outline = parser.parse(blueprint);
+    	var outline = Parser.parse(blueprint);
+    	var block = $(outline, 'CallExpression BlockStatement');
     	
-    	expect(outline.children[0].children[1].value).to.equal('');
+    	expect(block[0].body).to.have.length(2);
     });
     
     
     it('should return a correct object if a valid blueprint is given.', function(){
-    	var blueprint = [	
-    		'DESCRIBE: Parser\n'+
-    		'\tCONTEXT: when a valid blueprint is given,\n'+
-    		'\t\tIT: should pass a test spec.',
-    		
-    		'DESCRIBE: Parent\n'+
-    		'\tCONTEXT: can have many\n'+
-    		'\tCONTEXT: children'
+    	
+    	var blueprint = [ 
+			r`
+			DESCRIBE: Parser
+	    		CONTEXT: when a valid blueprint is given,
+					IT: should pass a test spec.`,
+    		r`
+			DESCRIBE: Parent
+				CONTEXT: can have many
+				CONTEXT: children`
     	];
     	
     	var expected = [
-    		{
-	    		key: 'describe',
-	    		value: 'Parser',
-	    		children: [
-	    			{
-	    				key: 'context', value: 'when a valid blueprint is given,',
-	    				children: [
-			    			{key: 'it', value: 'should pass a test spec.'}
-		    			]
-	    			}
-	    		]
-	    	},
-	    	{
-	    		key: 'describe',
-	    		value: 'Parent',
-	    		children: [
-	    			{key: 'context', value: 'can have many'},
-	    			{key: 'context', value: 'children'}
-	    		]
-	    	}
+    		esprima.parse(r`
+				describe('Parser', function() {
+					context('when a valid blueprint is given,', function() {
+						it('should pass a test spec.', function() {
+						});
+					});
+				});`
+    		),
+	    	esprima.parse(r`
+				describe('Parent', function() {
+					context('can have many', function() {
+					});
+					context('children', function(){
+					});
+				});`
+    		)
     	];
     	
     	for(var i = 0 ; i < blueprint.length ; i++) {
-    		var outline 	= parser.parse(blueprint[i]);
+    		var outline 	= Parser.parse(blueprint[i]);
     		
-    		expect(outline.children[0]).to.deep.equal(expected[i]);
+    		expect(diff(outline, expected[i])).to.be.undefined;
     	}
     });
 });
