@@ -21,46 +21,13 @@ DESCRIBE: I
 - Following above rules, each node has children and value
 
 ### outline
-- Javascript object to contain AST (abstract syntax tree) for blueprint
+- Javascript object to contain esTree(abstract syntax tree for ecmascript)
 - Parsed by parser module
-```javascript
-[{
-    key: 'describe',
-    value: 'I',
-    children: [
-        {
-            key: 'context',
-            value: 'when the weather is cloudy,',
-            children: [
-                {
-                    key: 'it',
-                    value: 'should feel blue..',
-                    children: []
-                },
-                {
-                ...
-                }
-            ]
-        },
-        {
-            key: 'context',
-            value: 'when the weather is sunny,',
-            children: [
-                {
-                ...
-                },
-                {
-                ...
-                }
-            ]
-        }
-    ]
-}]
-```
+
 
 ### maze
 - Test specifications which is consist of ttd framework syntax('describe', 'it', etc)
-- Created by builder
+- Created by builder with 'outline'
 ```javascript
 describe('I', function() {
     context('when the weather is cloudy', function() {
