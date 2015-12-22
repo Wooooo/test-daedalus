@@ -3,12 +3,18 @@
   "version": "0.0.1",
   "description": "A test builder like cucumberjs but for tdd like mocha, jasmine",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "escodegen": "^1.7.1",
+    "esprima": "^2.7.1"
+  },
   "devDependencies": {
     "chai": "^3.4.1",
     "coveralls": "^2.11.6",
+    "deep-diff": "^0.3.3",
+    "esquery": "^0.4.0",
     "istanbul": "^0.4.1",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "remove-tabs": "^0.0.2"
   },
   "scripts": {
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
