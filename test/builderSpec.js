@@ -1,34 +1,35 @@
 const
 	Parser      = require('../lib/parser'),
 	Builder		= require('../lib/builder'),
-	expect		= require('chai').expect;
+	expect		= require('chai').expect,
+	r			= require('remove-tabs');
 	
-describe.skip('MazeBuilder', function(){
+describe('MazeBuilder', function(){
 	it('should return correct mazes when valid outlines are provided.', function(){
 		var outlines = [
-			Parser.parse(
-				'DESCRIBE: Parser\n'
+			Parser.parse(r`
+				DESCRIBE: Parser`
 			),
 			
-			Parser.parse(
-				'DESCRIBE: Parser\n'+
-				'	CONTEXT: when a valid blueprint is given,\n'+
-				'		IT: should pass a test spec.'
+			Parser.parse(r`
+				DESCRIBE: Parser
+					CONTEXT: when a valid blueprint is given,
+						IT: should pass a test spec.`
 			)
 		];
 		
 		var expected = [
-			'describe(\'Parser\', function() {\n'+
-			'	// your codes here\n'+
-			'});\n',
+			r`
+			describe('Parser', function () {
+			});`,
 			
-			'describe(\'Parser\', function() {\n'+
-			'	context(\'when a valid blueprint is given,\', function() {\n'+
-			'		it(\'should pass a test spec.\', function() {\n'+
-			'			// your codes here\n'+
-			'		});\n'+
-			'	});\n'+
-			'});\n'
+			r`
+			describe('Parser', function () {
+				context('when a valid blueprint is given,', function () {
+					it('should pass a test spec.', function () {
+					});
+				});
+			});`
 		];
 		
 		for(var i = 0 ; i < outlines.length ; i++) {
