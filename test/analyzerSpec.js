@@ -3,7 +3,7 @@ const
     Analyzer    = require('../lib/analyzer'),
     expect      = require('chai').expect;
 
-describe('Analyzer', function() {
+describe.skip('Analyzer', function() {
     it('should detect diffs between outlines by maze and blueprint.', function(){
         var mazes =[
             r`
