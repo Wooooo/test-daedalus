@@ -37,14 +37,27 @@ describe('BluePrintParser', function(){
     
     
     it('should ignore a comment which has leading #.', function(){
-    	var blueprint = r`
+    	var blueprints = [
+    		r`
     		DESCRIBE: Comment
-				# should ignore!`;
+				# should ignore!`,
+				
+			r`
+			DESCRIBE: Comment
+				# should ignore
+				CONTEXT: should not ignore.`
+		];
+		
     	
-    	var outline = Parser.parse(blueprint);
-    	var block = $(outline, 'CallExpression BlockStatement');
+    	var lengths = [0, 1];
     	
-    	expect(block[0].body).to.have.length(0);
+    	for(var i = 0 ; i < blueprints.length ; i++) {
+    		var outline = Parser.parse(blueprints[i]);
+    		
+    		var block = $(outline, 'CallExpression BlockStatement');
+    		
+	    	expect(block[0].body).to.have.length(lengths[i]);
+    	}
     });
     
     
